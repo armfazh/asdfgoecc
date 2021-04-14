@@ -3,25 +3,27 @@
 package main
 
 import (
-	"crypto/elliptic"
+	"crypto/rand"
 	"testing"
+
+	"github.com/cloudflare/circl/group"
 )
 
 func BenchmarkScalarBaseMult(b *testing.B) {
-	curve := elliptic.P256()
-	k := make([]byte, curve.Params().BitSize/8)
-	RandScalar(k)
+	G := group.P256
+	g := G.NewElement()
+	k := G.RandomScalar(rand.Reader)
 	for i := 0; i < b.N; i++ {
-		_, _ = curve.ScalarBaseMult(k)
+		g.MulGen(k)
 	}
 }
 
 func BenchmarkScalarMult(b *testing.B) {
-	curve := elliptic.P256()
-	k := make([]byte, curve.Params().BitSize/8)
-	RandScalar(k)
-	x0, y0 := curve.ScalarBaseMult(k)
+	G := group.P256
+	g := G.Generator()
+	k := G.RandomScalar(rand.Reader)
+	h := G.NewElement()
 	for i := 0; i < b.N; i++ {
-		_, _ = curve.ScalarMult(x0, y0, k)
+		h.Mul(g, k)
 	}
 }
