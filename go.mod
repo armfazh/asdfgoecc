@@ -4,7 +4,7 @@ go 1.24.0
 
 toolchain go1.24.1
 
-require github.com/cloudflare/circl v1.6.1
+require github.com/cloudflare/circl v1.6.3
 
 require (
 	github.com/bwesterb/go-ristretto v1.2.3 // indirect
